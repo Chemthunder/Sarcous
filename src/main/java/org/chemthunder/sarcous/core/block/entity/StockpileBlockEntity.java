@@ -31,27 +31,29 @@ public class StockpileBlockEntity extends PoweredBlockEntity {
 
             for (ItemEntity droppedItem : world.getEntitiesByClass(ItemEntity.class, detect, (item -> true))) {
                 if (droppedItem.age >= 20) {
-                    ItemStack filter = this.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
+                    if (droppedItem.getBlockX() != pos.getX() && droppedItem.getBlockZ() != pos.getZ()) {
+                        ItemStack filter = this.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
 
-                    if (world.getBlockEntity(pos.down()) instanceof LootableContainerBlockEntity container) {
-                        for (int i = 0; i < container.size(); i++) {
-                            ItemStack slot = container.getStack(i);
+                        if (world.getBlockEntity(pos.down()) instanceof LootableContainerBlockEntity container) {
+                            for (int i = 0; i < container.size(); i++) {
+                                ItemStack slot = container.getStack(i);
 
-                            if (slot.isEmpty()) {
-                                if (filter != null) {
-                                    if (droppedItem.getStack().isOf(filter.getItem())) {
-                                        absorb(container, world, droppedItem, i);
-                                        return;
-                                    } else {
-                                        break;
+                                if (slot.isEmpty()) {
+                                    if (filter != null) {
+                                        if (droppedItem.getStack().isOf(filter.getItem())) {
+                                            absorb(container, world, droppedItem, i);
+                                            return;
+                                        } else {
+                                            break;
+                                        }
                                     }
+                                    absorb(container, world, droppedItem, i);
+                                    break;
                                 }
-                                absorb(container, world, droppedItem, i);
-                                break;
                             }
+                        } else {
+                            droppedItem.setPosition(pos.down().toCenterPos());
                         }
-                    } else {
-                        droppedItem.setPosition(pos.down().toCenterPos());
                     }
                 }
             }

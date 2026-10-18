@@ -2,6 +2,7 @@ package org.chemthunder.sarcous.core.block.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
@@ -26,6 +27,18 @@ public class DrillBlockEntity extends BlockEntity {
 
     public void tick(BlockState state, BlockPos pos, World world, DrillBlockEntity entity) {
         if (world.isReceivingRedstonePower(pos)) {
+            if (world.getBlockState(pos.up()).isTransparent()) {
+                world.addParticleClient(
+                        ParticleTypes.LARGE_SMOKE,
+                        pos.toCenterPos().getX(),
+                        pos.toCenterPos().getY(),
+                        pos.toCenterPos().getZ(),
+                        0,
+                        0.06F,
+                        0
+                );
+            }
+
             if (delay > 0) {
                 delay--;
                 if (delay == 0) {

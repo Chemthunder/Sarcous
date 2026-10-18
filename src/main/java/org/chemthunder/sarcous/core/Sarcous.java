@@ -22,6 +22,7 @@ public class Sarcous implements ModInitializer {
 		SarcousBlockEntityTypes.init();
 		SarcousItemGroups.init();
 		SarcousAttachmentTypes.init();
+		SarcousStatusEffects.init();
 
 		PoweredBlockEntityInteractionEvents.init();
 
