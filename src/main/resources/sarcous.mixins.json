@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "org.chemthunder.sarcous.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ExampleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "client.InGameHudMixin"
+  ]
+}

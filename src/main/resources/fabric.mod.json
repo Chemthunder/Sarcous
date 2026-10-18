@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "sarcous",
+	"version": "${version}",
+	"name": "Sarcous",
+	"description": "Rip & Tear Until It's Done.",
+	"authors": [
+		"Chemthunder"
+	],
+	"license": "ARR",
+	"icon": "assets/sarcous/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"org.chemthunder.sarcous.core.Sarcous"
+		],
+		"client": [
+			"org.chemthunder.sarcous.core.SarcousClient"
+		],
+		"fabric-datagen": [
+			"org.chemthunder.sarcous.datagen.SarcousDataGenerator"
+		]
+	},
+	"mixins": [
+		"sarcous.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
