@@ -7,7 +7,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.util.Identifier;
 import org.chemthunder.sarcous.core.Sarcous;
-import org.chemthunder.sarcous.core.client.ponder.PonderEvents;
+import org.chemthunder.sarcous.core.client.event.PonderEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 

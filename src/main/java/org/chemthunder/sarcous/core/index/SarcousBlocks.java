@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import org.chemthunder.sarcous.core.Sarcous;
 import org.chemthunder.sarcous.core.block.DrillBlock;
+import org.chemthunder.sarcous.core.block.StockpileBlock;
 import org.chemthunder.sarcous.core.block.TestDepositBlock;
 import org.chemthunder.sarcous.core.block.TestMachineBlock;
 
@@ -22,6 +23,9 @@ public interface SarcousBlocks {
     );
 
     Block DRILL = plugin.registerWithItem("drill", DrillBlock::new, AbstractBlock.Settings.copy(Blocks.IRON_BLOCK)
+    );
+
+    Block STOCKPILE = plugin.registerWithItem("stockpile", StockpileBlock::new, AbstractBlock.Settings.copy(Blocks.IRON_BLOCK)
     );
 
     static void init() {}

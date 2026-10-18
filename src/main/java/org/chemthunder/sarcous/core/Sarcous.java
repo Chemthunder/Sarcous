@@ -4,10 +4,8 @@ import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.util.Identifier;
 
-import org.chemthunder.sarcous.core.index.SarcousBlockEntityTypes;
-import org.chemthunder.sarcous.core.index.SarcousBlocks;
-import org.chemthunder.sarcous.core.index.SarcousItemGroups;
-import org.chemthunder.sarcous.core.index.SarcousItems;
+import org.chemthunder.sarcous.core.event.PoweredBlockEntityInteractionEvents;
+import org.chemthunder.sarcous.core.index.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +21,11 @@ public class Sarcous implements ModInitializer {
 		SarcousBlocks.init();
 		SarcousBlockEntityTypes.init();
 		SarcousItemGroups.init();
+		SarcousAttachmentTypes.init();
 
-		LOGGER.info("Hello Fabric world!");
+		PoweredBlockEntityInteractionEvents.init();
+
+		LOGGER.info("blood.... mmmm....");
 	}
 
 	public static Identifier id(String path) {

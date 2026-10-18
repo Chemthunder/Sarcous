@@ -20,12 +20,13 @@ public interface SarcousItemGroups {
     CreativeModeTabRegistrant plugin = new CreativeModeTabRegistrant(Sarcous.MOD_ID);
 
     RegistryKey<ItemGroup> GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Sarcous.id(Sarcous.MOD_ID));
-    ItemGroup GROUP = plugin.register(GROUP_KEY.getValue().getPath(), FabricItemGroup.builder()
-            .icon(() -> new ItemStack(SarcousBlocks.DRILL.asItem()))
-            .displayName(Text.literal(MiscUtils.formatString(Sarcous.MOD_ID)).withColor(0xFFff0000))
-            .build());
 
     static void init() {
+        plugin.register(GROUP_KEY.getValue().getPath(), FabricItemGroup.builder()
+                .icon(() -> new ItemStack(SarcousBlocks.DRILL.asItem()))
+                .displayName(Text.literal(MiscUtils.formatString(Sarcous.MOD_ID)).withColor(0xFFff0000))
+                .build());
+
         ItemGroupEvents.modifyEntriesEvent(GROUP_KEY).register(SarcousItemGroups::addEntries);
     }
 

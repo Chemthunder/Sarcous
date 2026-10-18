@@ -20,5 +20,6 @@ public class SarcousLanguageProvider extends FabricLanguageProvider {
         translationBuilder.add(SarcousItems.COLLECTORS_CARVER, "Collector's Carver");
 
         translationBuilder.add(SarcousBlocks.DRILL, "Drill");
+        translationBuilder.add(SarcousBlocks.STOCKPILE, "Stockpile");
     }
 }

@@ -1,0 +1,105 @@
+package org.chemthunder.sarcous.core.event;
+
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
+import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
+import org.chemthunder.sarcous.core.index.SarcousAttachmentTypes;
+
+import java.util.Random;
+
+/**
+ * @author Chemthunder
+ */
+public class PoweredBlockEntityInteractionEvents {
+    public static void init() {
+        UseBlockCallback.EVENT.register(new InputFuel());
+        UseBlockCallback.EVENT.register(new FilterStockpile());
+    }
+
+    public static class FilterStockpile implements UseBlockCallback {
+        public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+            BlockPos pos = hitResult.getBlockPos();
+            ItemStack stack = player.getStackInHand(hand);
+
+            if (player.isSneaking() && hand == Hand.MAIN_HAND) {
+                if (world.getBlockEntity(pos) instanceof StockpileBlockEntity stockpile) {
+                    ItemStack filter = stockpile.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
+
+                    if (stack.isEmpty()) {
+                        if (filter != null) { // remove filtered item
+                            player.equipStack(hand.getEquipmentSlot(), filter);
+                            stockpile.setAttached(SarcousAttachmentTypes.STOCKPILE_FILTER, null);
+                            playBlockSound(
+                                    SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE,
+                                    world,
+                                    pos,
+                                    0.3F, 0.6F
+                            );
+                            return ActionResult.SUCCESS;
+                        }
+                    } else {
+                        if (filter == null) { // input filter
+                            stockpile.setAttached(SarcousAttachmentTypes.STOCKPILE_FILTER, stack.split(1));
+                            playBlockSound(
+                                    SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN,
+                                    world,
+                                    pos,
+                                    0.3F, 0.6F
+                            );
+                            return ActionResult.SUCCESS;
+                        }
+                    }
+                }
+            }
+            return ActionResult.PASS;
+        }
+    }
+
+    public static class InputFuel implements UseBlockCallback {
+        public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+            BlockPos pos = hitResult.getBlockPos();
+            ItemStack stack = player.getStackInHand(hand);
+
+            if (world.getBlockEntity(pos) instanceof PoweredBlockEntity power) {
+                if (stack.isOf(Items.ROTTEN_FLESH)) {
+                    power.incrementFuel();
+                    player.swingHand(hand);
+                    stack.split(1);
+                    playBlockSound(
+                            SoundEvents.ENTITY_GENERIC_EAT.value(),
+                            world,
+                            pos,
+                            0.3F,
+                            0.6F
+                    );
+                    return ActionResult.SUCCESS;
+                }
+            }
+            return ActionResult.PASS;
+        }
+    }
+
+    private static void playBlockSound(SoundEvent event, World world, BlockPos pos, float min, float max) {
+        world.playSound(
+                null,
+                pos.toCenterPos().x,
+                pos.toCenterPos().y,
+                pos.toCenterPos().z,
+                event,
+                SoundCategory.BLOCKS,
+                1,
+                new Random().nextFloat(min, max)
+        );
+    }
+}

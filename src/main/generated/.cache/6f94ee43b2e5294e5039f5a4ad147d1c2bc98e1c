@@ -1,12 +1,15 @@
 // 1.21.11	-999999999-01-01T00:00:00	Sarcous/Model Definitions
 80db8dd7aeed2d0795e9b96ba766c24a8b1188ba assets/sarcous/blockstates/drill.json
+4f6c4678a44e966c7777397c3b112ae6bb298be0 assets/sarcous/blockstates/stockpile.json
 57c164bb0d8798768f592a6802be26bcfd88dc9c assets/sarcous/blockstates/test_deposit.json
 01641c329ec90a254039d88ee97bd0d103271099 assets/sarcous/blockstates/test_machine.json
 7043cbb5381cff27437bda3916cfed9d9d18ecc6 assets/sarcous/items/collectors_carver.json
 d2ec418cd76223ce80d30dc2d3d97c3b1cbb05e9 assets/sarcous/items/drill.json
+5a3ac704cd38a1287c28aac52e83dc20f1e7c728 assets/sarcous/items/stockpile.json
 4d82c163222434637e8dcf41e6aedcf4dbce64d3 assets/sarcous/items/test_deposit.json
 cf6ce3d11f8d73f63400d9c9fc9cd38a59fd50a1 assets/sarcous/items/test_machine.json
 7dbf3b2ee0a33ddcf1d4d5e56d331fa417cc5a2d assets/sarcous/models/block/drill.json
+bfa485c3832bd30cdbb87108a3fb4dea1228a03d assets/sarcous/models/block/stockpile.json
 598f8ee718e5ab886c68ff1677e6af57fc321bd4 assets/sarcous/models/block/test_deposit.json
 3ee0f34e546fc3d5d79818c873161c77e9353e8a assets/sarcous/models/block/test_machine.json
 fb93c733c0cba5a6149a58db2cae92233aa3cd84 assets/sarcous/models/item/collectors_carver.json

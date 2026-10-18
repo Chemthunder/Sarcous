@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.chemthunder.sarcous.core.block.entity.DrillBlockEntity;
-import org.chemthunder.sarcous.core.client.api.PonderedBlock;
+import org.chemthunder.sarcous.api.block.PonderedBlock;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;

@@ -2,6 +2,7 @@ package org.chemthunder.sarcous.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import org.chemthunder.sarcous.datagen.providers.client.SarcousLanguageProvider;
 import org.chemthunder.sarcous.datagen.providers.client.SarcousModelProvider;
 
 /**
@@ -13,5 +14,6 @@ public class SarcousDataGenerator implements DataGeneratorEntrypoint {
 
 		/// CLIENT ===
 		pack.addProvider(SarcousModelProvider::new);
+		pack.addProvider(SarcousLanguageProvider::new);
 	}
 }

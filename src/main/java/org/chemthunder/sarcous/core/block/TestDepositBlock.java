@@ -9,7 +9,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.chemthunder.sarcous.core.block.api.DrillableBlock;
+import org.chemthunder.sarcous.api.block.DrillableBlock;
 
 /**
  * @author Chemthunder

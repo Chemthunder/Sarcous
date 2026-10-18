@@ -1,5 +1,6 @@
-package org.chemthunder.sarcous.core.client.ponder;
+package org.chemthunder.sarcous.core.client.event;
 
+import net.acoyt.acornlib.api.util.MiscUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -13,7 +14,6 @@ import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -23,7 +23,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.World;
 import org.chemthunder.sarcous.core.Sarcous;
-import org.chemthunder.sarcous.core.client.api.PonderedBlock;
+import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
+import org.chemthunder.sarcous.api.block.PonderedBlock;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
 
@@ -35,8 +36,9 @@ import java.util.List;
  */
 @Environment(EnvType.CLIENT)
 public class PonderEvents {
-    public static @Nullable List<Text> lastDisplayed = null;
+    public static @Nullable List<Text> tooltip = null;
     public static @Nullable Item renderedBlock = null;
+
     public static float opacity = 0.0F;
 
     public static boolean pondering = false;
@@ -65,13 +67,19 @@ public class PonderEvents {
                 if (state.getBlock() instanceof PonderedBlock ponder) {
                     List<Text> output = new ArrayList<>();
 
-                    output.add(Text.literal(Registries.BLOCK.getId(state.getBlock()).getPath())
-                            .formatted(Formatting.RED)
-                            .formatted(Formatting.UNDERLINE)
+                    output.add(Text.literal(MiscUtils.formatString(Registries.BLOCK.getId(state.getBlock()).getPath()))
+                            .formatted(Formatting.RED, Formatting.BOLD, Formatting.ITALIC)
                     );
+
+                    if (world.getBlockEntity(target) instanceof PoweredBlockEntity power) {
+                        output.add(Text.empty()
+                                .append(Text.literal("Fuel Value: ").formatted(Formatting.DARK_GRAY))
+                                .append(Text.literal(power.getFuel() + "").formatted(Formatting.RED, Formatting.BOLD)));
+                    }
+
                     output.addAll(ponder.getPonderedText(state, target, world, player));
 
-                    lastDisplayed = output;
+                    tooltip = output;
                     renderedBlock = state.getBlock().asItem();
                     pondering = true;
 
@@ -81,7 +89,7 @@ public class PonderEvents {
                     return;
                 }
             }
-            lastDisplayed = null;
+            tooltip = null;
             pondering = false;
             opacity = 0.0F;
         }
@@ -89,24 +97,25 @@ public class PonderEvents {
 
     public static class Element implements HudElement {
         public void render(DrawContext context, RenderTickCounter tickCounter) {
-            if (lastDisplayed != null) {
+            TextRenderer tr = MinecraftClient.getInstance().textRenderer;
+            Matrix3x2fStack stack = context.getMatrices();
+
+            if (tooltip != null) {
                 int x = context.getScaledWindowWidth() / 2 + 10;
                 int y = context.getScaledWindowHeight() / 2 - 20;
 
-                TextRenderer font = MinecraftClient.getInstance().textRenderer;
+                int width = 0;
+                int height = 12;
 
-                int width = font.getWidth(lastDisplayed.getFirst());
-                int lastWidth = width;
-
-                for (Text line : lastDisplayed) {
-                    int tested = font.getWidth(line);
+                for (Text line : tooltip) {
+                    int tested = tr.getWidth(line);
 
                     if (tested > width) {
                         width = tested;
                     }
-                }
 
-                Matrix3x2fStack stack = context.getMatrices();
+                    height += 12;
+                }
 
                 if (renderedBlock != null) {
                     stack.pushMatrix();
@@ -126,16 +135,16 @@ public class PonderEvents {
                         x - 3,
                         y - 3,
                         x + (width + 5),
-                        y + 64,
+                        y + height,
                         ColorHelper.withAlpha(opacity / 2, 0xFF000000)
                 );
 
-                for (Text line : lastDisplayed) {
+                for (Text line : tooltip) {
                     context.drawText(
-                            MinecraftClient.getInstance().textRenderer,
+                            tr,
                             line,
                             x,
-                            y + (lastDisplayed.indexOf(line) * 15),
+                            y + (tooltip.indexOf(line) * 14),
                             ColorHelper.withAlpha(opacity, 0xFFffffff),
                             true
                     );

@@ -20,6 +20,7 @@ public class SarcousModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(SarcousBlocks.TEST_MACHINE);
         blockStateModelGenerator.registerSimpleCubeAll(SarcousBlocks.TEST_DEPOSIT);
         blockStateModelGenerator.registerSimpleCubeAll(SarcousBlocks.DRILL);
+        blockStateModelGenerator.registerSimpleCubeAll(SarcousBlocks.STOCKPILE);
     }
 
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {

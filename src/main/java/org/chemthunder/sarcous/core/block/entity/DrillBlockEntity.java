@@ -2,13 +2,12 @@ package org.chemthunder.sarcous.core.block.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.TridentItem;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.chemthunder.sarcous.core.block.api.DrillableBlock;
+import org.chemthunder.sarcous.api.block.DrillableBlock;
 import org.chemthunder.sarcous.core.index.SarcousBlockEntityTypes;
 
 import java.util.ArrayList;
@@ -26,31 +25,33 @@ public class DrillBlockEntity extends BlockEntity {
     }
 
     public void tick(BlockState state, BlockPos pos, World world, DrillBlockEntity entity) {
-        if (delay > 0) {
-            delay--;
-            if (delay == 0) {
-                for (BlockPos t : getTargetedPositions(pos)) {
-                    BlockState tState = world.getBlockState(t);
+        if (world.isReceivingRedstonePower(pos)) {
+            if (delay > 0) {
+                delay--;
+                if (delay == 0) {
+                    for (BlockPos t : getTargetedPositions(pos)) {
+                        BlockState tState = world.getBlockState(t);
 
-                    if (tState.getBlock() instanceof DrillableBlock drillable) {
-                        drillable.onDrilled(tState, t, world);
+                        if (tState.getBlock() instanceof DrillableBlock drillable) {
+                            drillable.onDrilled(tState, t, world);
 
-                        world.playSound(
-                                null,
-                                pos.getX(),
-                                pos.getY(),
-                                pos.getZ(),
-                                drillable.getDrillSound(state, pos, world),
-                                SoundCategory.BLOCKS,
-                                1,
-                                1
-                        );
+                            world.playSound(
+                                    null,
+                                    pos.getX(),
+                                    pos.getY(),
+                                    pos.getZ(),
+                                    drillable.getDrillSound(state, pos, world),
+                                    SoundCategory.BLOCKS,
+                                    1,
+                                    1
+                            );
 
-                        world.addBlockBreakParticles(t, tState);
+                            world.addBlockBreakParticles(t, tState);
+                        }
                     }
+                    delay = DELAY_BETWEEN_STRIKES;
+                    this.markDirty();
                 }
-                delay = DELAY_BETWEEN_STRIKES;
-                this.markDirty();
             }
         }
     }

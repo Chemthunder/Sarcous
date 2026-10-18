@@ -1,4 +1,4 @@
-package org.chemthunder.sarcous.core.block.api;
+package org.chemthunder.sarcous.api.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.sound.SoundEvent;
