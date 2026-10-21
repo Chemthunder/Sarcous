@@ -4,7 +4,7 @@ import net.acoyt.acornlib.api.registrants.BlockRegistrant;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import org.chemthunder.sarcous.api.energy.EnergyTier;
+import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.Sarcous;
 import org.chemthunder.sarcous.core.block.*;
 

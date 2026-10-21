@@ -13,7 +13,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.chemthunder.sarcous.api.energy.EnergyTier;
+import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.block.entity.DrillBlockEntity;
 import org.chemthunder.sarcous.api.block.PonderedBlock;
 import org.jspecify.annotations.Nullable;

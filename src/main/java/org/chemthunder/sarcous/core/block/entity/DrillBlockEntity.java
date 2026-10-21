@@ -9,7 +9,8 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.DrillableBlock;
-import org.chemthunder.sarcous.api.energy.EnergyTier;
+import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
+import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.index.SarcousBlockEntityTypes;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * @author Chemthunder
  */
-public class DrillBlockEntity extends BlockEntity {
+public class DrillBlockEntity extends PoweredBlockEntity {
     private static final int DELAY_BETWEEN_STRIKES = 20;
     private int delay = DELAY_BETWEEN_STRIKES;
 
@@ -29,7 +30,7 @@ public class DrillBlockEntity extends BlockEntity {
     public void tick(BlockState state, BlockPos pos, World world, DrillBlockEntity entity) {
         if (state.contains(EnergyTier.PROPERTY)) {
             EnergyTier tier = state.get(EnergyTier.PROPERTY);
-            if (world.isReceivingRedstonePower(pos)) {
+            if (this.isPowered()) {
                 if (tier == EnergyTier.COALBURNER) {
                     if (world.getBlockState(pos.up()).isTransparent()) {
                         world.addParticleClient(

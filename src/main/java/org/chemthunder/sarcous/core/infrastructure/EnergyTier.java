@@ -1,4 +1,4 @@
-package org.chemthunder.sarcous.api.energy;
+package org.chemthunder.sarcous.core.infrastructure;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.state.property.EnumProperty;

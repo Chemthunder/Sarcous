@@ -22,7 +22,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.World;
-import org.chemthunder.sarcous.api.energy.EnergyTier;
+import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.Sarcous;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
 import org.chemthunder.sarcous.api.block.PonderedBlock;
@@ -71,12 +71,6 @@ public class PonderEvents {
                     output.add(Text.literal(MiscUtils.formatString(Registries.BLOCK.getId(state.getBlock()).getPath()))
                             .formatted(Formatting.RED, Formatting.BOLD, Formatting.ITALIC)
                     );
-
-                    if (state.contains(EnergyTier.PROPERTY)) {
-                        EnergyTier tier = state.get(EnergyTier.PROPERTY);
-
-                        output.add(Text.literal(tier.name()).formatted(Formatting.RED, Formatting.BOLD));
-                    }
 
                     if (world.getBlockEntity(target) instanceof PoweredBlockEntity power) {
                         output.add(Text.empty()

@@ -14,7 +14,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
-import org.chemthunder.sarcous.api.energy.EnergyTier;
+import org.chemthunder.sarcous.core.index.SarcousBlocks;
+import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
 import org.chemthunder.sarcous.core.index.SarcousAttachmentTypes;
 
@@ -101,6 +102,21 @@ public class PoweredBlockEntityInteractionEvents {
                             stack.split(1);
                             playBlockSound(
                                     SoundEvents.ENTITY_GENERIC_EAT.value(),
+                                    world,
+                                    pos
+                            );
+                            return ActionResult.SUCCESS;
+                        }
+                    }
+                } else {
+                    if (state.isOf(SarcousBlocks.GEOTHERMIC_GENERATOR)) {
+                        if (stack.isOf(Items.LAVA_BUCKET)) {
+                            power.incrementFuel();
+                            player.swingHand(hand);
+                            stack.split(1);
+                            player.giveItemStack(new ItemStack(Items.BUCKET));
+                            playBlockSound(
+                                    SoundEvents.ITEM_BUCKET_EMPTY_LAVA,
                                     world,
                                     pos
                             );
