@@ -23,7 +23,7 @@ public interface SarcousItemGroups {
 
     static void init() {
         plugin.register(GROUP_KEY.getValue().getPath(), FabricItemGroup.builder()
-                .icon(() -> new ItemStack(SarcousBlocks.DRILL.asItem()))
+                .icon(() -> new ItemStack(SarcousBlocks.DRILL_COALBURNER.asItem()))
                 .displayName(Text.literal(MiscUtils.formatString(Sarcous.MOD_ID)).withColor(0xFFff0000))
                 .build());
 

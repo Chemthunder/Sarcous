@@ -1,5 +1,7 @@
 package org.chemthunder.sarcous.api.energy;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.StringIdentifiable;
 
 /**
@@ -11,6 +13,13 @@ public enum EnergyTier implements StringIdentifiable {
     BILEFUEL("bilefuel"); // powered by bile
 
     private final String id;
+
+    public static final Codec<EnergyTier> CODEC = StringIdentifiable.createCodec(EnergyTier::values);
+
+    public static final EnumProperty<EnergyTier> PROPERTY = EnumProperty.of(
+            "energy_tier",
+            EnergyTier.class
+    );
 
     EnergyTier(String id) {
         this.id = id;

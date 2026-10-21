@@ -1,6 +1,7 @@
 package org.chemthunder.sarcous.core.event;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -13,6 +14,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
+import org.chemthunder.sarcous.api.energy.EnergyTier;
 import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
 import org.chemthunder.sarcous.core.index.SarcousAttachmentTypes;
 
@@ -43,8 +45,7 @@ public class PoweredBlockEntityInteractionEvents {
                             playBlockSound(
                                     SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE,
                                     world,
-                                    pos,
-                                    0.3F, 0.6F
+                                    pos
                             );
                             return ActionResult.SUCCESS;
                         }
@@ -54,8 +55,7 @@ public class PoweredBlockEntityInteractionEvents {
                             playBlockSound(
                                     SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN,
                                     world,
-                                    pos,
-                                    0.3F, 0.6F
+                                    pos
                             );
                             return ActionResult.SUCCESS;
                         }
@@ -72,25 +72,48 @@ public class PoweredBlockEntityInteractionEvents {
             ItemStack stack = player.getStackInHand(hand);
 
             if (world.getBlockEntity(pos) instanceof PoweredBlockEntity power) {
-                if (stack.isOf(Items.ROTTEN_FLESH)) {
-                    power.incrementFuel();
-                    player.swingHand(hand);
-                    stack.split(1);
-                    playBlockSound(
-                            SoundEvents.ENTITY_GENERIC_EAT.value(),
-                            world,
-                            pos,
-                            0.3F,
-                            0.6F
-                    );
-                    return ActionResult.SUCCESS;
+                BlockState state = world.getBlockState(pos);
+
+                if (state.contains(EnergyTier.PROPERTY)) {
+                    EnergyTier tier = state.get(EnergyTier.PROPERTY);
+
+                    if (tier == EnergyTier.COALBURNER) {
+                        if (stack.isOf(Items.COAL)) {
+                            power.incrementFuel();
+                            player.swingHand(hand);
+                            stack.split(1);
+                            playBlockSound(
+                                    SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE,
+                                    world,
+                                    pos
+                            );
+                            playBlockSound(
+                                    SoundEvents.BLOCK_IRON_DOOR_CLOSE,
+                                    world,
+                                    pos
+                            );
+                            return ActionResult.SUCCESS;
+                        }
+                    } else if (tier == EnergyTier.BILEFUEL) {
+                        if (stack.isOf(Items.ROTTEN_FLESH)) {
+                            power.incrementFuel();
+                            player.swingHand(hand);
+                            stack.split(1);
+                            playBlockSound(
+                                    SoundEvents.ENTITY_GENERIC_EAT.value(),
+                                    world,
+                                    pos
+                            );
+                            return ActionResult.SUCCESS;
+                        }
+                    }
                 }
             }
             return ActionResult.PASS;
         }
     }
 
-    private static void playBlockSound(SoundEvent event, World world, BlockPos pos, float min, float max) {
+    private static void playBlockSound(SoundEvent event, World world, BlockPos pos) {
         world.playSound(
                 null,
                 pos.toCenterPos().x,
@@ -99,7 +122,7 @@ public class PoweredBlockEntityInteractionEvents {
                 event,
                 SoundCategory.BLOCKS,
                 1,
-                new Random().nextFloat(min, max)
+                new Random().nextFloat(0.3F, 0.6F)
         );
     }
 }
