@@ -34,11 +34,6 @@ public class DrillBlock extends BlockWithEntity implements PonderedBlock {
         );
     }
 
-    @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return super.getPlacementState(ctx);
-    }
-
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(EnergyTier.PROPERTY);

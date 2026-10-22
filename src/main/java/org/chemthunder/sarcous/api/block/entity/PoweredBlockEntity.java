@@ -23,8 +23,6 @@ public abstract class PoweredBlockEntity extends BlockEntity {
         super(type, pos, state);
     }
 
-    public void tick(World world, BlockPos pos, BlockState state) {}
-
     public void tickPowerConsumption() {
         if (this.delay > 0) {
             this.delay--;

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
@@ -23,7 +24,7 @@ public interface SarcousItemGroups {
 
     static void init() {
         plugin.register(GROUP_KEY.getValue().getPath(), FabricItemGroup.builder()
-                .icon(() -> new ItemStack(SarcousBlocks.DRILL_COALBURNER.asItem()))
+                .icon(() -> new ItemStack(Items.ROTTEN_FLESH))
                 .displayName(Text.literal(MiscUtils.formatString(Sarcous.MOD_ID)).withColor(0xFFff0000))
                 .build());
 

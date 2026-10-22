@@ -19,16 +19,17 @@ public interface SarcousBlockEntityTypes {
 
     BlockEntityType<DrillBlockEntity> DRILL = plugin.register("drill", FabricBlockEntityTypeBuilder.create(
             DrillBlockEntity::new
-    ).addBlocks(SarcousBlocks.DRILL_TIERS).build());
+    ).addBlocks(SarcousBlocks.DRILLS.values()).build());
 
+    BlockEntityType<StockpileBlockEntity> STOCKPILE = plugin.register("stockpile", FabricBlockEntityTypeBuilder.create(
+            StockpileBlockEntity::new
+    ).addBlocks(SarcousBlocks.STOCKPILES.values()).build());
+
+
+    //
     BlockEntityType<TestMachineBlockEntity> TEST_MACHINE = plugin.register("test_machine", FabricBlockEntityTypeBuilder.create(
             TestMachineBlockEntity::new,
             SarcousBlocks.TEST_MACHINE
-    ).build());
-
-    BlockEntityType<StockpileBlockEntity> STOCKPILE = plugin.register("stockpile", FabricBlockEntityTypeBuilder.create(
-            StockpileBlockEntity::new,
-            SarcousBlocks.STOCKPILE
     ).build());
 
     BlockEntityType<GeneratorBlockEntity> GENERATOR = plugin.register("generator", FabricBlockEntityTypeBuilder.create(

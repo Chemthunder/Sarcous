@@ -8,7 +8,7 @@
 		"Chemthunder"
 	],
 	"license": "ARR",
-	"icon": "assets/sarcous/icon.png",
+	"icon": "n",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

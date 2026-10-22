@@ -1,5 +1,10 @@
 {
-  "block.sarcous.drill": "Drill",
-  "block.sarcous.stockpile": "Stockpile",
+  "block.sarcous.bilefueled_drill": "Bilefueled Drill",
+  "block.sarcous.bilefueled_stockpile": "Bilefueled Stockpile",
+  "block.sarcous.coalburning_drill": "Coalburning Drill",
+  "block.sarcous.coalburning_stockpile": "Coalburning Stockpile",
+  "block.sarcous.geothermic_drill": "Geothermic Drill",
+  "block.sarcous.geothermic_stockpile": "Geothermic Stockpile",
+  "effect.sarcous.hypovolemia": "Hypovolemia",
   "item.sarcous.collectors_carver": "Collector's Carver"
 }

@@ -26,11 +26,11 @@ public class StockpileBlockEntity extends PoweredBlockEntity {
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
-        if (this.isPowered()) {
-            Box detect = new Box(pos).expand(5);
+        if (true) {
+            Box detect = new Box(pos).expand(15);
 
             for (ItemEntity droppedItem : world.getEntitiesByClass(ItemEntity.class, detect, (item -> true))) {
-                if (droppedItem.age >= 20) {
+                if (true) {
                     if (droppedItem.getBlockX() != pos.getX() && droppedItem.getBlockZ() != pos.getZ()) {
                         ItemStack filter = this.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
 
