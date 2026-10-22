@@ -1,6 +1,7 @@
 package org.chemthunder.sarcous.core.block.entity;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -26,12 +27,12 @@ public class StockpileBlockEntity extends PoweredBlockEntity {
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {
-        if (true) {
+        if (this.isPowered()) {
             Box detect = new Box(pos).expand(15);
 
             for (ItemEntity droppedItem : world.getEntitiesByClass(ItemEntity.class, detect, (item -> true))) {
                 if (true) {
-                    if (droppedItem.getBlockX() != pos.getX() && droppedItem.getBlockZ() != pos.getZ()) {
+                    if (droppedItem.getBlockX() != pos.getX() && droppedItem.getBlockZ() != pos.getY()) {
                         ItemStack filter = this.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
 
                         if (world.getBlockEntity(pos.down()) instanceof LootableContainerBlockEntity container) {

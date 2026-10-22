@@ -58,6 +58,11 @@ public abstract class PoweredBlockEntity extends BlockEntity {
         this.markDirty();
     }
 
+    public void decrementFuel() {
+        this.fuel--;
+        this.markDirty();
+    }
+
     public boolean isPowered() {
         return this.fuel > 0;
     }

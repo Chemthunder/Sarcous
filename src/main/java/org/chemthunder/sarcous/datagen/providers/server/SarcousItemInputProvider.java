@@ -1,14 +1,12 @@
 package org.chemthunder.sarcous.datagen.providers.server;
 
-import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.data.DataOutput;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
-import org.chemthunder.sarcous.api.energy.ItemInput;
+import org.chemthunder.sarcous.api.data.ItemInput;
 import org.chemthunder.sarcous.core.Sarcous;
 import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.infrastructure.data.ItemInputCollector;
@@ -28,9 +26,7 @@ public class SarcousItemInputProvider extends FabricCodecDataProvider<ItemInput>
         provider.accept(
                 Sarcous.id("test"),
                 new ItemInput(
-                        Ingredient.ofItem(
-                                Items.BEDROCK
-                        ),
+                        Items.BEDROCK,
                         EnergyTier.GEOTHERMIC,
                         4
                 )

@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -15,7 +14,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
-import org.chemthunder.sarcous.api.energy.ItemInput;
+import org.chemthunder.sarcous.api.data.ItemInput;
 import org.chemthunder.sarcous.core.index.SarcousBlocks;
 import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
@@ -85,7 +84,7 @@ public class PoweredBlockEntityInteractionEvents {
 
                     for (ItemInput compat : ItemInputCollector.getEntries().values()) {
                         if (tier == compat.tier()) {
-                            if (compat.ingredient().acceptsItem(RegistryEntry.of(stack.getItem()))) {
+                            if (compat.ingredient() == stack.getItem()) {
                                 for (int i = 0; i < compat.value(); i++) {
                                     power.incrementFuel();
                                 }

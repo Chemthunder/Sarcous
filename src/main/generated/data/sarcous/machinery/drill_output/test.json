@@ -1,0 +1,7 @@
+{
+  "block": "minecraft:gold_block",
+  "output": "minecraft:gold_nugget",
+  "sound": {
+    "sound_id": "minecraft:block.nether_gold_ore.break"
+  }
+}

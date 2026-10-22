@@ -28,4 +28,57 @@ public enum EnergyTier implements StringIdentifiable {
     public String asString() {
         return this.id;
     }
+
+    public double multiplyDouble(double input) {
+        switch (this) {
+            case COALBURNER -> {
+                return input * 1;
+            }
+            case GEOTHERMIC -> {
+                return input * 1.33;
+            }
+            case BILEFUEL -> {
+                return input * 2;
+            }
+        }
+        return input;
+    }
+
+    public static double multiplyDouble(EnergyTier tier, double input) {
+        switch (tier) {
+            case COALBURNER -> {
+                return input * 1;
+            }
+            case GEOTHERMIC -> {
+                return input * 1.33;
+            }
+            case BILEFUEL -> {
+                return input * 2;
+            }
+        }
+        return input;
+    }
+
+    public int multiplyInt(int input) {
+        switch (this) {
+            case COALBURNER -> {
+                return input;
+            }
+            case GEOTHERMIC -> {
+                return input * 2;
+            }
+            case BILEFUEL -> {
+                return input * 3;
+            }
+        }
+        return input;
+    }
+
+    public int inSeconds() {
+        return switch (this) {
+            case COALBURNER -> 50;
+            case GEOTHERMIC -> 25;
+            case BILEFUEL -> 10;
+        };
+    }
 }
