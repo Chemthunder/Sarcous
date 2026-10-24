@@ -1,0 +1,8 @@
+{
+  "ingredient": "minecraft:deepslate_coal_ore",
+  "sound": {
+    "sound_id": "minecraft:block.furnace.fire_crackle"
+  },
+  "tier": "coalburning",
+  "value": 2
+}

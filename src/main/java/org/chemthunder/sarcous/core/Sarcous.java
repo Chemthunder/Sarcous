@@ -2,14 +2,16 @@ package org.chemthunder.sarcous.core;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
+import org.chemthunder.sarcous.core.event.DataLoggingEvent;
 import org.chemthunder.sarcous.core.event.PoweredBlockEntityInteractionEvents;
 import org.chemthunder.sarcous.core.index.*;
 import org.chemthunder.sarcous.core.infrastructure.data.DrillOutputCollector;
-import org.chemthunder.sarcous.core.infrastructure.data.ItemInputCollector;
+import org.chemthunder.sarcous.core.infrastructure.data.FuelInputCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,17 +29,16 @@ public class Sarcous implements ModInitializer {
 		SarcousItemGroups.init();
 		SarcousAttachmentTypes.init();
 		SarcousStatusEffects.init();
+		SarcousGameRules.init();
 
 		PoweredBlockEntityInteractionEvents.init();
 
-		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(id(ItemInputCollector.path), new ItemInputCollector());
+		ServerLifecycleEvents.SERVER_STARTED.register(new DataLoggingEvent());
+
+		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(id(FuelInputCollector.path), new FuelInputCollector());
 		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(id(DrillOutputCollector.path), new DrillOutputCollector());
 
 		LOGGER.info("blood.... mmmm....");
-
-		for (String input : ItemInputCollector.getEntries().keySet()) {
-			System.out.println(input);
-		}
 	}
 
 	public static Identifier id(String path) {

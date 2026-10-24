@@ -1,0 +1,8 @@
+{
+  "ingredient": "minecraft:rotten_flesh",
+  "sound": {
+    "sound_id": "minecraft:entity.generic.eat"
+  },
+  "tier": "bilefueled",
+  "value": 1
+}

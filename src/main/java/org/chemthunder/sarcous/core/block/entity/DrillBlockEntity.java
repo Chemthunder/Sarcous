@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.DrillableBlock;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
 import org.chemthunder.sarcous.api.data.DrillOutput;
-import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.index.SarcousBlockEntityTypes;
+import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
 import org.chemthunder.sarcous.core.infrastructure.data.DrillOutputCollector;
 
 import java.util.ArrayList;
@@ -55,13 +55,13 @@ public class DrillBlockEntity extends PoweredBlockEntity {
                         for (BlockPos t : getTargetedPositions(pos)) {
                             BlockState tState = world.getBlockState(t);
 
-                            for (DrillOutput output : DrillOutputCollector.getEntries().values()) {
+                            for (DrillOutput output : DrillOutputCollector.LOADED_DATA.values()) {
                                 if (tState.getBlock() == output.block()) {
                                     ItemScatterer.spawn(
                                             world,
-                                            pos.toCenterPos().x,
-                                            pos.toCenterPos().y,
-                                            pos.toCenterPos().z,
+                                            t.toCenterPos().x,
+                                            t.toCenterPos().y,
+                                            t.toCenterPos().z,
                                             new ItemStack(output.output())
                                     );
 

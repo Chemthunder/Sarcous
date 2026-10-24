@@ -1,0 +1,8 @@
+{
+  "ingredient": "minecraft:charcoal",
+  "sound": {
+    "sound_id": "minecraft:block.furnace.fire_crackle"
+  },
+  "tier": "coalburning",
+  "value": 1
+}

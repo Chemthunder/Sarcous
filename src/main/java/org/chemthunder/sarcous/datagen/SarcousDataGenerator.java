@@ -4,8 +4,9 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import org.chemthunder.sarcous.datagen.providers.client.SarcousLanguageProvider;
 import org.chemthunder.sarcous.datagen.providers.client.SarcousModelProvider;
-import org.chemthunder.sarcous.datagen.providers.server.SarcousDrillOutputProvider;
-import org.chemthunder.sarcous.datagen.providers.server.SarcousItemInputProvider;
+import org.chemthunder.sarcous.datagen.providers.server.machinery.DrillOutputProvider;
+import org.chemthunder.sarcous.datagen.providers.server.machinery.FuelInputProvider;
+import org.chemthunder.sarcous.datagen.providers.server.tag.SarcousItemTagProvider;
 
 /**
  * @author Chemthunder
@@ -19,7 +20,9 @@ public class SarcousDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(SarcousLanguageProvider::new);
 
 		/// SERVER ===
-		pack.addProvider(SarcousItemInputProvider::new);
-		pack.addProvider(SarcousDrillOutputProvider::new);
+		pack.addProvider(FuelInputProvider::new);
+		pack.addProvider(DrillOutputProvider::new);
+
+		pack.addProvider(SarcousItemTagProvider::new);
 	}
 }

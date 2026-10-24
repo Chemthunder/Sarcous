@@ -1,41 +1,41 @@
 package org.chemthunder.sarcous.core.infrastructure.data;
 
-import net.acoyt.acornlib.api.util.MiscUtils;
+import com.mojang.serialization.JsonOps;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceFinder;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.profiler.Profiler;
 import org.chemthunder.sarcous.api.data.DrillOutput;
-import org.chemthunder.sarcous.api.data.ItemInput;
+import org.chemthunder.sarcous.core.Sarcous;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author Chemthunder
  */
-public class DrillOutputCollector extends JsonDataLoader<DrillOutput> {
-    public static final Map<Identifier, DrillOutput> data = new HashMap<>();
+public class DrillOutputCollector extends SimpleResourceReloader<Map<Identifier, DrillOutput>> {
+    public static final Map<Identifier, DrillOutput> LOADED_DATA = new HashMap<>();
     public static final String path = "machinery/drill_output";
 
-    public DrillOutputCollector() {
-        super(DrillOutput.CODEC, ResourceFinder.json(path));
+    protected Map<Identifier, DrillOutput> prepare(Store store) {
+        Map<Identifier, DrillOutput> rawData = new HashMap<>();
+        JsonDataLoader.load(store.getResourceManager(), ResourceFinder.json(path),
+                store.getOrThrow(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY).getOps(JsonOps.INSTANCE),
+                DrillOutput.CODEC,
+                rawData
+        );
+
+        Sarcous.LOGGER.info("Prepared incoming data: {}", rawData);
+        return rawData;
     }
 
-    protected void apply(Map<Identifier, DrillOutput> prepared, ResourceManager manager, Profiler profiler) {
-        data.clear();
-        data.putAll(prepared);
-    }
+    protected void apply(Map<Identifier, DrillOutput> prepared, Store store) {
+        LOADED_DATA.clear();
+        LOADED_DATA.putAll(prepared);
 
-    public static Map<String, DrillOutput> getEntries() {
-        Map<String, DrillOutput> values = new HashMap<>();
-        data.forEach((id, data) -> {
-            String formatted = MiscUtils.formatAfter(id.getPath(), '/').replace(".json", "");
-            values.computeIfAbsent(formatted, st -> data);
-        });
-
-        return values;
+        Sarcous.LOGGER.info("Applied data: {}", Arrays.toString(LOADED_DATA.keySet().toArray()));
     }
 }

@@ -14,12 +14,12 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
-import org.chemthunder.sarcous.api.data.ItemInput;
-import org.chemthunder.sarcous.core.index.SarcousBlocks;
-import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
+import org.chemthunder.sarcous.api.data.FuelInput;
 import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
 import org.chemthunder.sarcous.core.index.SarcousAttachmentTypes;
-import org.chemthunder.sarcous.core.infrastructure.data.ItemInputCollector;
+import org.chemthunder.sarcous.core.index.SarcousBlocks;
+import org.chemthunder.sarcous.core.infrastructure.EnergyTier;
+import org.chemthunder.sarcous.core.infrastructure.data.FuelInputCollector;
 
 import java.util.Random;
 
@@ -82,7 +82,7 @@ public class PoweredBlockEntityInteractionEvents {
                 if (state.contains(EnergyTier.PROPERTY)) {
                     EnergyTier tier = state.get(EnergyTier.PROPERTY);
 
-                    for (ItemInput compat : ItemInputCollector.getEntries().values()) {
+                    for (FuelInput compat : FuelInputCollector.LOADED_DATA.values()) {
                         if (tier == compat.tier()) {
                             if (compat.ingredient() == stack.getItem()) {
                                 for (int i = 0; i < compat.value(); i++) {
@@ -95,64 +95,14 @@ public class PoweredBlockEntityInteractionEvents {
                                         pos,
                                         1
                                 );
+                                playBlockSound(
+                                        compat.event(),
+                                        world,
+                                        pos,
+                                        1
+                                );
                                 return ActionResult.SUCCESS;
                             }
-                        }
-                    }
-
-                    if (tier == EnergyTier.COALBURNER) {
-                        if (stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL)) {
-                            power.incrementFuel();
-                            player.swingHand(hand);
-                            stack.split(1);
-                            playBlockSound(
-                                    SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE,
-                                    world,
-                                    pos,
-                                    0.5F
-                            );
-                            playBlockSound(
-                                    SoundEvents.BLOCK_IRON_DOOR_CLOSE,
-                                    world,
-                                    pos,
-                                    1
-                            );
-                            return ActionResult.SUCCESS;
-                        }
-
-                        if (stack.isOf(Items.COAL_BLOCK)) {
-                            for (int i = 0; i < 9; i++) {
-                                power.incrementFuel();
-                            }
-
-                            player.swingHand(hand);
-                            stack.split(1);
-                            playBlockSound(
-                                    SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE,
-                                    world,
-                                    pos,
-                                    0.5F
-                            );
-                            playBlockSound(
-                                    SoundEvents.BLOCK_IRON_DOOR_CLOSE,
-                                    world,
-                                    pos,
-                                    1
-                            );
-                            return ActionResult.SUCCESS;
-                        }
-                    } else if (tier == EnergyTier.BILEFUEL) {
-                        if (stack.isOf(Items.ROTTEN_FLESH)) {
-                            power.incrementFuel();
-                            player.swingHand(hand);
-                            stack.split(1);
-                            playBlockSound(
-                                    SoundEvents.ENTITY_GENERIC_EAT.value(),
-                                    world,
-                                    pos,
-                                    1
-                            );
-                            return ActionResult.SUCCESS;
                         }
                     }
                 } else {
@@ -170,19 +120,6 @@ public class PoweredBlockEntityInteractionEvents {
                             );
                             return ActionResult.SUCCESS;
                         }
-                    }
-
-                    if (stack.isOf(Items.ROTTEN_FLESH)) {
-                        power.incrementFuel();
-                        player.swingHand(hand);
-                        stack.split(1);
-                        playBlockSound(
-                                SoundEvents.ENTITY_GENERIC_EAT.value(),
-                                world,
-                                pos,
-                                1
-                        );
-                        return ActionResult.SUCCESS;
                     }
                 }
             }

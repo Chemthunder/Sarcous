@@ -44,12 +44,9 @@ public class StockpileBlockEntity extends PoweredBlockEntity {
                                         if (droppedItem.getStack().isOf(filter.getItem())) {
                                             absorb(container, world, droppedItem, i);
                                             return;
-                                        } else {
-                                            break;
                                         }
                                     }
                                     absorb(container, world, droppedItem, i);
-                                    break;
                                 }
                             }
                         } else {
