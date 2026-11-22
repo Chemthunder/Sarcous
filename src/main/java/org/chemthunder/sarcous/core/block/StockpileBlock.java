@@ -1,19 +1,6 @@
 package org.chemthunder.sarcous.core.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateManager;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
 import org.chemthunder.sarcous.api.block.PonderedBlock;
 import org.chemthunder.sarcous.core.index.SarcousAttachmentTypes;
@@ -22,37 +9,50 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 
 /**
  * @author Chemthunder
  */
-public class StockpileBlock extends BlockWithEntity implements PonderedBlock {
+public class StockpileBlock extends BaseEntityBlock implements PonderedBlock {
     private final EnergyTier tier;
 
-    public StockpileBlock(Settings settings, EnergyTier tier) {
+    public StockpileBlock(Properties settings, EnergyTier tier) {
         super(settings);
         this.tier = tier;
-        this.setDefaultState(this.getDefaultState()
-                .with(EnergyTier.PROPERTY, tier)
+        this.registerDefaultState(this.defaultBlockState()
+                .setValue(EnergyTier.PROPERTY, tier)
         );
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        super.appendProperties(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(EnergyTier.PROPERTY);
     }
 
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return createCodec(settings1 -> new StockpileBlock(settings1, tier));
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec(settings1 -> new StockpileBlock(settings1, tier));
     }
 
     @Nullable
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new StockpileBlockEntity(pos, state);
     }
 
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World w, BlockState s, BlockEntityType<T> t) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level w, BlockState s, BlockEntityType<T> t) {
         return ((world, pos, state, blockEntity) -> {
             if (blockEntity instanceof StockpileBlockEntity entity) {
                 entity.tick(world, pos, state);
@@ -60,23 +60,23 @@ public class StockpileBlock extends BlockWithEntity implements PonderedBlock {
         });
     }
 
-    public List<Text> getPonderedText(BlockState state, BlockPos pos, World world, PlayerEntity viewer) {
+    public List<Component> getPonderedText(BlockState state, BlockPos pos, Level world, Player viewer) {
         if (world.getBlockEntity(pos) instanceof StockpileBlockEntity entity) {
-            List<Text> texts = new ArrayList<>();
+            List<Component> texts = new ArrayList<>();
             if (entity.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER) != null) {
                 ItemStack filter = entity.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
                 if (filter != null) {
-                    texts.add(Text.empty()
-                            .append(Text.literal("Filter: ").formatted(Formatting.DARK_GRAY))
-                            .append(Text.literal(filter.getName().getString()).formatted(Formatting.RED, Formatting.BOLD))
+                    texts.add(Component.empty()
+                            .append(Component.literal("Filter: ").withStyle(ChatFormatting.DARK_GRAY))
+                            .append(Component.literal(filter.getHoverName().getString()).withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
                     );
                 }
             }
 
             texts.addAll(List.of(
-                    Text.literal("Picks up nearby dropped items and"),
-                    Text.literal("funnels them into a container placed"),
-                    Text.literal("below.")
+                    Component.literal("Picks up nearby dropped items and"),
+                    Component.literal("funnels them into a container placed"),
+                    Component.literal("below.")
             ));
             return texts;
         }

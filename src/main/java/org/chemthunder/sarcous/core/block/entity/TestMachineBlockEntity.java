@@ -1,7 +1,7 @@
 package org.chemthunder.sarcous.core.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
 import org.chemthunder.sarcous.core.index.SarcousBlockEntityTypes;
 

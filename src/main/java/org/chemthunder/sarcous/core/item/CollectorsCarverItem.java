@@ -1,38 +1,38 @@
 package org.chemthunder.sarcous.core.item;
 
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 /**
  * @author Chemthunder
  */
 public class CollectorsCarverItem extends Item {
-    public CollectorsCarverItem(Settings settings) {
+    public CollectorsCarverItem(Properties settings) {
         super(settings);
     }
 
-    public static AttributeModifiersComponent attributes() {
-        return AttributeModifiersComponent.builder()
+    public static ItemAttributeModifiers attributes() {
+        return ItemAttributeModifiers.builder()
                 .add(
-                        EntityAttributes.ATTACK_DAMAGE,
-                        new EntityAttributeModifier(
-                                BASE_ATTACK_DAMAGE_MODIFIER_ID,
+                        Attributes.ATTACK_DAMAGE,
+                        new AttributeModifier(
+                                BASE_ATTACK_DAMAGE_ID,
                                 4.5,
-                                EntityAttributeModifier.Operation.ADD_VALUE
+                                AttributeModifier.Operation.ADD_VALUE
                         ),
-                        AttributeModifierSlot.MAINHAND
+                        EquipmentSlotGroup.MAINHAND
                 )
                 .add(
-                        EntityAttributes.ATTACK_SPEED,
-                        new EntityAttributeModifier(
-                                BASE_ATTACK_SPEED_MODIFIER_ID,
+                        Attributes.ATTACK_SPEED,
+                        new AttributeModifier(
+                                BASE_ATTACK_SPEED_ID,
                                 -2.4,
-                                EntityAttributeModifier.Operation.ADD_VALUE
+                                AttributeModifier.Operation.ADD_VALUE
                         ),
-                        AttributeModifierSlot.MAINHAND
+                        EquipmentSlotGroup.MAINHAND
                 )
                 .build();
     }

@@ -1,11 +1,11 @@
 package org.chemthunder.sarcous.core.infrastructure;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 
 /**
  * @author Chemthunder
@@ -17,14 +17,14 @@ public abstract class MachineryUtil {
         String output;
 
         for (EnergyTier tier : EnergyTier.values()) {
-            if (input.contains(tier.asString())) {
+            if (input.contains(tier.getSerializedName())) {
                 marked = tier;
                 break;
             }
         }
 
         if (marked != null) {
-            output = input.replaceAll(marked.asString(), "");
+            output = input.replaceAll(marked.getSerializedName(), "");
 
             return output;
         }
@@ -35,7 +35,7 @@ public abstract class MachineryUtil {
         List<BlockPos> list = new ArrayList<>();
 
         for (Direction dir : Direction.values()) {
-            list.add(center.offset(dir));
+            list.add(center.relative(dir));
         }
 
         return list;

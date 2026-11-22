@@ -4,7 +4,7 @@ import net.acoyt.acornlib.api.registrants.BlockEntityTypeRegistrant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.chemthunder.sarcous.core.Sarcous;
 import org.chemthunder.sarcous.core.block.entity.DrillBlockEntity;
 import org.chemthunder.sarcous.core.block.entity.GeneratorBlockEntity;
@@ -25,8 +25,6 @@ public interface SarcousBlockEntityTypes {
             StockpileBlockEntity::new
     ).addBlocks(SarcousBlocks.STOCKPILES.values()).build());
 
-
-    //
     BlockEntityType<TestMachineBlockEntity> TEST_MACHINE = plugin.register("test_machine", FabricBlockEntityTypeBuilder.create(
             TestMachineBlockEntity::new,
             SarcousBlocks.TEST_MACHINE

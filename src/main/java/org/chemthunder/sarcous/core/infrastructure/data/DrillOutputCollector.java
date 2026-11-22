@@ -3,9 +3,10 @@ package org.chemthunder.sarcous.core.infrastructure.data;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
-import net.minecraft.resource.JsonDataLoader;
-import net.minecraft.resource.ResourceFinder;
-import net.minecraft.util.Identifier;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.resources.FileToIdConverter;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import org.chemthunder.sarcous.api.data.DrillOutput;
 import org.chemthunder.sarcous.core.Sarcous;
 
@@ -20,22 +21,26 @@ public class DrillOutputCollector extends SimpleResourceReloader<Map<Identifier,
     public static final Map<Identifier, DrillOutput> LOADED_DATA = new HashMap<>();
     public static final String path = "machinery/drill_output";
 
-    protected Map<Identifier, DrillOutput> prepare(Store store) {
+    protected Map<Identifier, DrillOutput> prepare(SharedState store) {
         Map<Identifier, DrillOutput> rawData = new HashMap<>();
-        JsonDataLoader.load(store.getResourceManager(), ResourceFinder.json(path),
-                store.getOrThrow(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY).getOps(JsonOps.INSTANCE),
+        SimpleJsonResourceReloadListener.scanDirectory(store.resourceManager(), FileToIdConverter.json(path),
+                store.get(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY).createSerializationContext(JsonOps.INSTANCE),
                 DrillOutput.CODEC,
                 rawData
         );
 
-        Sarcous.LOGGER.info("Prepared incoming data: {}", rawData);
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            Sarcous.LOGGER.info("Prepared incoming data: {}", rawData);
+        }
         return rawData;
     }
 
-    protected void apply(Map<Identifier, DrillOutput> prepared, Store store) {
+    protected void apply(Map<Identifier, DrillOutput> prepared, SharedState store) {
         LOADED_DATA.clear();
         LOADED_DATA.putAll(prepared);
 
-        Sarcous.LOGGER.info("Applied data: {}", Arrays.toString(LOADED_DATA.keySet().toArray()));
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            Sarcous.LOGGER.info("Applied data: {}", Arrays.toString(LOADED_DATA.keySet().toArray()));
+        }
     }
 }

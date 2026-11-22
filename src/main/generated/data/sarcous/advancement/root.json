@@ -1,0 +1,24 @@
+{
+  "criteria": {
+    "e": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "sarcous:gui/advancements/backgrounds/sarcous",
+    "description": "Tech Must Progress",
+    "icon": {
+      "count": 1,
+      "id": "sarcous:coalburning_drill"
+    },
+    "show_toast": false,
+    "title": "Sarcous"
+  },
+  "requirements": [
+    [
+      "e"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

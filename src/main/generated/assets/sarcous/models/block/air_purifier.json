@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "sarcous:block/air_purifier_bottom",
+    "side": "sarcous:block/air_purifier_side",
+    "top": "sarcous:block/air_purifier_top"
+  }
+}

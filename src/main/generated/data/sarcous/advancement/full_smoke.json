@@ -1,0 +1,28 @@
+{
+  "parent": "sarcous:smoke",
+  "criteria": {
+    "e": {
+      "trigger": "sarcous:full_smoke"
+    }
+  },
+  "display": {
+    "background": "sarcous:gui/advancements/backgrounds/sarcous",
+    "description": "Inhale enough smoke from a Rollie for it to fully blacken.",
+    "frame": "goal",
+    "hidden": true,
+    "icon": {
+      "components": {
+        "sarcous:blackness": 160
+      },
+      "count": 1,
+      "id": "sarcous:rollie"
+    },
+    "title": "Lung Cancer Fears Thee"
+  },
+  "requirements": [
+    [
+      "e"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

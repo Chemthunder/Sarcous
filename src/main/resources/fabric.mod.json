@@ -7,6 +7,9 @@
 	"authors": [
 		"Chemthunder"
 	],
+	"contributors": [
+		"flngus"
+	],
 	"license": "ARR",
 	"icon": "n",
 	"environment": "*",
@@ -19,6 +22,9 @@
 		],
 		"fabric-datagen": [
 			"org.chemthunder.sarcous.datagen.SarcousDataGenerator"
+		],
+		"cardinal-components": [
+			"org.chemthunder.sarcous.core.cca.SarcousCCA"
 		]
 	},
 	"mixins": [
@@ -29,5 +35,10 @@
 		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*"
+	},
+	"custom": {
+		"cardinal-components": [
+			"sarcous:exhale"
+		]
 	}
 }

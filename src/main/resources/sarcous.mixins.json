@@ -3,7 +3,8 @@
   "package": "org.chemthunder.sarcous.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ExampleMixin",
+    "CropBlockMixin",
+    "FarmlandBlockMixin",
     "HopperBlockEntityMixin"
   ],
   "injectors": {
@@ -13,7 +14,11 @@
     "requireAnnotations": true
   },
   "client": [
-    "client.InGameHudMixin",
-    "client.StatusEffectsDisplayMixin"
+    "client.AvatarRendererMixin",
+    "client.BlockEntityRenderDispatcherMixin",
+    "client.BlockEntityRenderStateMixin",
+    "client.EffectsInInventoryMixin",
+    "client.FogRendererMixin",
+    "client.GuiMixin"
   ]
 }

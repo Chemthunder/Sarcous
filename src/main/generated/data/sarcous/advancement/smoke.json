@@ -1,0 +1,22 @@
+{
+  "parent": "sarcous:root",
+  "criteria": {
+    "e": {
+      "trigger": "sarcous:full_smoke"
+    }
+  },
+  "display": {
+    "description": "Smoke a Rollie.",
+    "icon": {
+      "count": 1,
+      "id": "sarcous:rollie"
+    },
+    "title": "Just to Take the Edge Off"
+  },
+  "requirements": [
+    [
+      "e"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,14 +1,5 @@
 package org.chemthunder.sarcous.core.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.DrillableBlock;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
 import org.chemthunder.sarcous.api.data.DrillOutput;
@@ -18,6 +9,15 @@ import org.chemthunder.sarcous.core.infrastructure.data.DrillOutputCollector;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 /**
  * @author Chemthunder
@@ -30,18 +30,18 @@ public class DrillBlockEntity extends PoweredBlockEntity {
         super(SarcousBlockEntityTypes.DRILL, pos, state);
     }
 
-    public void tick(BlockState state, BlockPos pos, World world, DrillBlockEntity entity) {
-        if (state.contains(EnergyTier.PROPERTY)) {
-            EnergyTier tier = state.get(EnergyTier.PROPERTY);
+    public void tick(BlockState state, BlockPos pos, Level world, DrillBlockEntity entity) {
+        if (state.hasProperty(EnergyTier.PROPERTY)) {
+            EnergyTier tier = state.getValue(EnergyTier.PROPERTY);
 
             if (this.isPowered()) {
                 if (tier == EnergyTier.COALBURNER) {
-                    if (world.getBlockState(pos.up()).isTransparent()) {
-                        world.addParticleClient(
+                    if (world.getBlockState(pos.above()).propagatesSkylightDown()) {
+                        world.addParticle(
                                 ParticleTypes.LARGE_SMOKE,
-                                pos.toCenterPos().getX(),
-                                pos.toCenterPos().getY(),
-                                pos.toCenterPos().getZ(),
+                                pos.getCenter().x(),
+                                pos.getCenter().y(),
+                                pos.getCenter().z(),
                                 0,
                                 0.06F,
                                 0
@@ -57,15 +57,15 @@ public class DrillBlockEntity extends PoweredBlockEntity {
 
                             for (DrillOutput output : DrillOutputCollector.LOADED_DATA.values()) {
                                 if (tState.getBlock() == output.block()) {
-                                    ItemScatterer.spawn(
+                                    Containers.dropItemStack(
                                             world,
-                                            t.toCenterPos().x,
-                                            t.toCenterPos().y,
-                                            t.toCenterPos().z,
+                                            t.getCenter().x,
+                                            t.getCenter().y,
+                                            t.getCenter().z,
                                             new ItemStack(output.output())
                                     );
 
-                                    world.addBlockBreakParticles(t, tState);
+                                    world.addDestroyBlockEffect(t, tState);
 
                                     world.playSound(
                                             null,
@@ -73,7 +73,7 @@ public class DrillBlockEntity extends PoweredBlockEntity {
                                             pos.getY(),
                                             pos.getZ(),
                                             output.sound(),
-                                            SoundCategory.BLOCKS,
+                                            SoundSource.BLOCKS,
                                             1,
                                             1
                                     );
@@ -91,16 +91,16 @@ public class DrillBlockEntity extends PoweredBlockEntity {
                                         pos.getY(),
                                         pos.getZ(),
                                         drillable.getDrillSound(state, pos, world),
-                                        SoundCategory.BLOCKS,
+                                        SoundSource.BLOCKS,
                                         1,
                                         1
                                 );
 
-                                world.addBlockBreakParticles(t, tState);
+                                world.addDestroyBlockEffect(t, tState);
                             }
                         }
                         delay = REROUTE;
-                        this.markDirty();
+                        this.setChanged();
                     }
                 }
             }
@@ -109,8 +109,8 @@ public class DrillBlockEntity extends PoweredBlockEntity {
 
     private static List<BlockPos> getTargetedPositions(BlockPos center) {
         List<BlockPos> list = new ArrayList<>();
-        list.add(center.up());
-        list.add(center.down());
+        list.add(center.above());
+        list.add(center.below());
         list.add(center.east());
         list.add(center.north());
         list.add(center.south());
@@ -118,11 +118,11 @@ public class DrillBlockEntity extends PoweredBlockEntity {
         return list;
     }
 
-    protected void readData(ReadView view) {
-        delay = view.getInt("Delay", REROUTE);
+    protected void loadAdditional(ValueInput view) {
+        delay = view.getIntOr("Delay", REROUTE);
     }
 
-    protected void writeData(WriteView view) {
+    protected void saveAdditional(ValueOutput view) {
         view.putInt("Delay", delay);
     }
 }

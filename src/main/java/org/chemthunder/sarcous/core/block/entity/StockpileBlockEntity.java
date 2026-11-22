@@ -1,21 +1,20 @@
 package org.chemthunder.sarcous.core.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.HopperBlockEntity;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
 import org.chemthunder.sarcous.core.index.SarcousAttachmentTypes;
 import org.chemthunder.sarcous.core.index.SarcousBlockEntityTypes;
 
 import java.util.Random;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 /**
  * @author Chemthunder
@@ -23,55 +22,57 @@ import java.util.Random;
 public class StockpileBlockEntity extends PoweredBlockEntity {
     public StockpileBlockEntity(BlockPos pos, BlockState state) {
         super(SarcousBlockEntityTypes.STOCKPILE, pos, state);
-        this.delayRerouteTime = 80;
+        this.delayRerouteTime = (3 * 20);
     }
 
-    public void tick(World world, BlockPos pos, BlockState state) {
+    public void tick(Level world, BlockPos pos, BlockState state) {
         if (this.isPowered()) {
-            Box detect = new Box(pos).expand(15);
+            AABB detect = new AABB(pos).inflate(15);
 
-            for (ItemEntity droppedItem : world.getEntitiesByClass(ItemEntity.class, detect, (item -> true))) {
-                if (true) {
-                    if (droppedItem.getBlockX() != pos.getX() && droppedItem.getBlockZ() != pos.getY()) {
-                        ItemStack filter = this.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
+            this.tickPowerConsumption();
 
-                        if (world.getBlockEntity(pos.down()) instanceof LootableContainerBlockEntity container) {
-                            for (int i = 0; i < container.size(); i++) {
-                                ItemStack slot = container.getStack(i);
+            for (ItemEntity droppedItem : world.getEntitiesOfClass(ItemEntity.class, detect, (item -> true))) {
+                if (droppedItem.getBlockX() != pos.getX() && droppedItem.getBlockZ() != pos.getY()) {
+                    ItemStack filter = this.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
 
-                                if (slot.isEmpty()) {
-                                    if (filter != null) {
-                                        if (droppedItem.getStack().isOf(filter.getItem())) {
-                                            absorb(container, world, droppedItem, i);
-                                            return;
-                                        }
+                    if (world.getBlockEntity(pos.below()) instanceof RandomizableContainerBlockEntity container) {
+                        for (int i = 0; i < container.getContainerSize(); i++) {
+                            ItemStack slot = container.getItem(i);
+
+                            if (slot.isEmpty()) {
+                                if (filter != null) {
+                                    if (droppedItem.getItem().is(filter.getItem())) {
+                                        absorb(container, world, droppedItem, i);
+                                        return;
                                     }
-                                    absorb(container, world, droppedItem, i);
                                 }
+                                absorb(container, world, droppedItem, i);
+                                break;
                             }
-                        } else {
-                            droppedItem.setPosition(pos.down().toCenterPos());
                         }
+                    } else {
+                        droppedItem.setPos(pos.below().getCenter());
                     }
                 }
             }
         }
     }
 
-    private static void absorb(LootableContainerBlockEntity container, World world, ItemEntity droppedItem, int slot) {
-        container.setStack(slot, droppedItem.getStack());
+    private static void absorb(RandomizableContainerBlockEntity container, Level world, ItemEntity droppedItem, int slot) {
+        container.setItem(slot, droppedItem.getItem());
 
         world.playSound(
                 null,
-                droppedItem.getBlockPos(),
-                SoundEvents.ENTITY_ITEM_PICKUP,
-                SoundCategory.BLOCKS,
+                droppedItem.blockPosition(),
+                SoundEvents.ITEM_PICKUP,
+                SoundSource.BLOCKS,
                 1,
                 new Random().nextFloat(0.5F, 0.8F)
         );
 
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             droppedItem.kill(serverWorld);
         }
     }
 }
+

@@ -1,22 +1,22 @@
 package org.chemthunder.sarcous.core.infrastructure;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 /**
  * @author Chemthunder
  */
-public enum EnergyTier implements StringIdentifiable {
+public enum EnergyTier implements StringRepresentable {
     COALBURNER("coalburning"), // powered by inputting coal
     GEOTHERMIC("geothermic"), // powered by generators
     BILEFUEL("bilefueled"); // powered by bile
 
     private final String id;
 
-    public static final Codec<EnergyTier> CODEC = StringIdentifiable.createCodec(EnergyTier::values);
+    public static final Codec<EnergyTier> CODEC = StringRepresentable.fromEnum(EnergyTier::values);
 
-    public static final EnumProperty<EnergyTier> PROPERTY = EnumProperty.of(
+    public static final EnumProperty<EnergyTier> PROPERTY = EnumProperty.create(
             "energy_tier",
             EnergyTier.class
     );
@@ -25,7 +25,7 @@ public enum EnergyTier implements StringIdentifiable {
         this.id = id;
     }
 
-    public String asString() {
+    public String getSerializedName() {
         return this.id;
     }
 

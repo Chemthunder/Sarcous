@@ -1,8 +1,8 @@
 package org.chemthunder.sarcous.core.index;
 
 import net.acoyt.acornlib.api.registrants.GameRuleRegistrant;
-import net.minecraft.world.rule.GameRule;
-import net.minecraft.world.rule.GameRuleCategory;
+import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.gamerules.GameRuleCategory;
 import org.chemthunder.sarcous.core.Sarcous;
 
 /**

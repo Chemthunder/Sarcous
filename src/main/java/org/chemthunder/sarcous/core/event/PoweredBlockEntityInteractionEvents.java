@@ -1,18 +1,18 @@
 package org.chemthunder.sarcous.core.event;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.chemthunder.sarcous.api.block.entity.PoweredBlockEntity;
 import org.chemthunder.sarcous.api.data.FuelInput;
 import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
@@ -33,54 +33,52 @@ public class PoweredBlockEntityInteractionEvents {
     }
 
     public static class FilterStockpile implements UseBlockCallback {
-        public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        public InteractionResult interact(Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
             BlockPos pos = hitResult.getBlockPos();
-            ItemStack stack = player.getStackInHand(hand);
+            ItemStack stack = player.getItemInHand(hand);
 
-            if (player.isSneaking() && hand == Hand.MAIN_HAND) {
+            if (player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND) {
                 if (world.getBlockEntity(pos) instanceof StockpileBlockEntity stockpile) {
                     ItemStack filter = stockpile.getAttached(SarcousAttachmentTypes.STOCKPILE_FILTER);
 
                     if (stack.isEmpty()) {
                         if (filter != null) { // remove filtered item
-                            player.equipStack(hand.getEquipmentSlot(), filter);
+                            player.setItemSlot(hand.asEquipmentSlot(), filter);
                             stockpile.setAttached(SarcousAttachmentTypes.STOCKPILE_FILTER, null);
                             playBlockSound(
-                                    SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE,
+                                    SoundEvents.IRON_TRAPDOOR_CLOSE,
                                     world,
-                                    pos,
-                                    1
+                                    pos
                             );
-                            return ActionResult.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         }
                     } else {
                         if (filter == null) { // input filter
                             stockpile.setAttached(SarcousAttachmentTypes.STOCKPILE_FILTER, stack.split(1));
                             playBlockSound(
-                                    SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN,
+                                    SoundEvents.IRON_TRAPDOOR_OPEN,
                                     world,
-                                    pos,
-                                    1
+                                    pos
                             );
-                            return ActionResult.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 }
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
     }
 
     public static class InputFuel implements UseBlockCallback {
-        public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        public InteractionResult interact(Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
             BlockPos pos = hitResult.getBlockPos();
-            ItemStack stack = player.getStackInHand(hand);
+            ItemStack stack = player.getItemInHand(hand);
 
             if (world.getBlockEntity(pos) instanceof PoweredBlockEntity power) {
                 BlockState state = world.getBlockState(pos);
 
-                if (state.contains(EnergyTier.PROPERTY)) {
-                    EnergyTier tier = state.get(EnergyTier.PROPERTY);
+                if (state.hasProperty(EnergyTier.PROPERTY)) {
+                    EnergyTier tier = state.getValue(EnergyTier.PROPERTY);
 
                     for (FuelInput compat : FuelInputCollector.LOADED_DATA.values()) {
                         if (tier == compat.tier()) {
@@ -90,52 +88,49 @@ public class PoweredBlockEntityInteractionEvents {
                                 }
                                 stack.split(1);
                                 playBlockSound(
-                                        SoundEvents.BLOCK_IRON_DOOR_CLOSE,
+                                        SoundEvents.IRON_DOOR_CLOSE,
                                         world,
-                                        pos,
-                                        1
+                                        pos
                                 );
                                 playBlockSound(
                                         compat.event(),
                                         world,
-                                        pos,
-                                        1
+                                        pos
                                 );
-                                return ActionResult.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             }
                         }
                     }
                 } else {
-                    if (state.isOf(SarcousBlocks.GEOTHERMIC_GENERATOR)) {
-                        if (stack.isOf(Items.LAVA_BUCKET)) {
+                    if (state.is(SarcousBlocks.GEOTHERMIC_GENERATOR)) {
+                        if (stack.is(Items.LAVA_BUCKET)) {
                             power.incrementFuel();
-                            player.swingHand(hand);
+                            player.swing(hand);
                             stack.split(1);
-                            player.giveItemStack(new ItemStack(Items.BUCKET));
+                            player.addItem(new ItemStack(Items.BUCKET));
                             playBlockSound(
-                                    SoundEvents.ITEM_BUCKET_EMPTY_LAVA,
+                                    SoundEvents.BUCKET_EMPTY_LAVA,
                                     world,
-                                    pos,
-                                    1
+                                    pos
                             );
-                            return ActionResult.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 }
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
     }
 
-    private static void playBlockSound(SoundEvent event, World world, BlockPos pos, float volume) {
+    private static void playBlockSound(SoundEvent event, Level world, BlockPos pos) {
         world.playSound(
                 null,
-                pos.toCenterPos().x,
-                pos.toCenterPos().y,
-                pos.toCenterPos().z,
+                pos.getCenter().x,
+                pos.getCenter().y,
+                pos.getCenter().z,
                 event,
-                SoundCategory.BLOCKS,
-                volume,
+                SoundSource.BLOCKS,
+                (float) 1,
                 new Random().nextFloat(0.3F, 0.6F)
         );
     }

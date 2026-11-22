@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "sarcous:item/rollie",
+    "tints": [
+      {
+        "type": "sarcous:rollie_blackening"
+      }
+    ]
+  }
+}
