@@ -12,7 +12,7 @@ import org.chemthunder.sarcous.core.index.SarcousAttachmentTypes;
 /**
  * @author Chemthunder
  */
-public class BarometricPollutionEVent implements HudElement {
+public class BarometricPollutionEvent implements HudElement {
     public void render(GuiGraphics context, DeltaTracker tickCounter) {
         Minecraft minecraft = Minecraft.getInstance();
 

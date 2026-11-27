@@ -6,10 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.chemthunder.sarcous.core.Sarcous;
-import org.chemthunder.sarcous.core.block.entity.DrillBlockEntity;
-import org.chemthunder.sarcous.core.block.entity.GeneratorBlockEntity;
-import org.chemthunder.sarcous.core.block.entity.StockpileBlockEntity;
-import org.chemthunder.sarcous.core.block.entity.TestMachineBlockEntity;
+import org.chemthunder.sarcous.core.block.entity.*;
 
 /**
  * @author Chemthunder
@@ -33,6 +30,11 @@ public interface SarcousBlockEntityTypes {
     BlockEntityType<GeneratorBlockEntity> GENERATOR = plugin.register("generator", FabricBlockEntityTypeBuilder.create(
             GeneratorBlockEntity::new,
             SarcousBlocks.GEOTHERMIC_GENERATOR
+    ).build());
+
+    BlockEntityType<AirPurifierBlockEntity> AIR_PURIFIER = plugin.register("air_purifier", FabricBlockEntityTypeBuilder.create(
+            AirPurifierBlockEntity::new,
+            SarcousBlocks.AIR_PURIFIER
     ).build());
 
     static void init() {}

@@ -4,11 +4,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.color.item.ItemTintSources;
-import org.chemthunder.sarcous.core.client.event.BarometricPollutionEVent;
+import org.chemthunder.sarcous.core.client.event.BarometricPollutionEvent;
 import org.chemthunder.sarcous.core.client.event.NoSmokingEvents;
 import org.chemthunder.sarcous.core.client.event.PollutionFadeInEvent;
 import org.chemthunder.sarcous.core.client.event.PonderEvents;
@@ -33,7 +32,7 @@ public class SarcousClient implements ClientModInitializer {
         SarcousBlockEntityTypes.clinit();
         SarcousBlocks.clinit();
 
-        HudElementRegistry.addFirst(Sarcous.id("pollution"), new BarometricPollutionEVent());
+        HudElementRegistry.addFirst(Sarcous.id("pollution"), new BarometricPollutionEvent());
 
         ClientTickEvents.START_CLIENT_TICK.register(new PollutionFadeInEvent());
 

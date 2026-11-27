@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * @author Chemthunder
  */
 @Mixin(value = BlockEntityRenderState.class)
-public class BlockEntityRenderStateMixin {
+public abstract class BlockEntityRenderStateMixin {
     @Inject(method = "extractBase", at = @At(value = "TAIL"))
     private static void sarcous$updateKey(BlockEntity blockEntity, BlockEntityRenderState state, ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, CallbackInfo ci) {
         if (blockEntity.hasAttached(SarcousAttachmentTypes.OVERCLOCKED)) {

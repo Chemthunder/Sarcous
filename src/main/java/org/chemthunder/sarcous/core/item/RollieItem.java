@@ -58,7 +58,9 @@ public class RollieItem extends Item {
 
         double po = chunk.getAttachedOrCreate(SarcousAttachmentTypes.POLLUTION_LEVEL);
 
-        chunk.setAttached(SarcousAttachmentTypes.POLLUTION_LEVEL, po + 0.02);
+        if (level.random.nextInt(1, 6) == 3) {
+            chunk.setAttached(SarcousAttachmentTypes.POLLUTION_LEVEL, po + 0.5);
+        }
 
         if (itemStack.getOrDefault(SarcousDataComponentTypes.BLACKNESS, 0) >= MAX_TIME) {
             if (livingEntity instanceof ServerPlayer serverPlayer) {
